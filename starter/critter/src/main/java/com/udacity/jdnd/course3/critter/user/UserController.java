@@ -1,9 +1,13 @@
 package com.udacity.jdnd.course3.critter.user;
 
+import com.udacity.jdnd.course3.critter.pet.Pet;
+import com.udacity.jdnd.course3.critter.pet.PetMapper;
+import com.udacity.jdnd.course3.critter.pet.PetService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.DayOfWeek;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -18,14 +22,34 @@ import java.util.Set;
 public class UserController {
 
     @Autowired
+    private PetMapper petMapper;
+
+    @Autowired
     private CustomerMapper customerMapper;
+
+    @Autowired
+    private EmployeeMapper employeeMapper;
+
+    @Autowired
+    private PetService petService;
 
     @Autowired
     private CustomerService customerService;
 
+    @Autowired
+    private EmployeeService employeeService;
+
     @PostMapping("/customer")
     public CustomerDTO saveCustomer(@RequestBody CustomerDTO customerDTO) {
-        Customer customer = customerMapper.DTOtoEntity(customerDTO);
+        List<Long> petIds = customerDTO.getPetIds();
+        List<Pet> pets = new ArrayList<>();
+        if (petIds != null) {
+            for (Long petId : petIds) {
+                Pet pet = petService.getPet(petId);
+                pets.add(pet);
+            }
+        }
+        Customer customer = customerMapper.DTOtoEntity(customerDTO, pets);
         Customer savedCustomer = customerService.createCustomer(customer);
         return customerMapper.entityToDTO(savedCustomer);
     }
@@ -43,12 +67,15 @@ public class UserController {
 
     @PostMapping("/employee")
     public EmployeeDTO saveEmployee(@RequestBody EmployeeDTO employeeDTO) {
-        throw new UnsupportedOperationException();
+        Employee employee = employeeMapper.DTOtoEntity(employeeDTO);
+        Employee savedEmployee = employeeService.createEmployee(employee);
+        return employeeMapper.entityToDTO(savedEmployee);
     }
 
     @PostMapping("/employee/{employeeId}")
     public EmployeeDTO getEmployee(@PathVariable long employeeId) {
-        throw new UnsupportedOperationException();
+        Employee employee = employeeService.getEmployee(employeeId);
+        return employeeMapper.entityToDTO(employee);
     }
 
     @PutMapping("/employee/{employeeId}")
