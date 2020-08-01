@@ -1,5 +1,10 @@
 package com.udacity.jdnd.course3.critter.schedule;
 
+import com.udacity.jdnd.course3.critter.pet.Pet;
+import com.udacity.jdnd.course3.critter.pet.PetService;
+import com.udacity.jdnd.course3.critter.user.Customer;
+import com.udacity.jdnd.course3.critter.user.CustomerService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,28 +16,44 @@ import java.util.List;
 @RequestMapping("/schedule")
 public class ScheduleController {
 
+    @Autowired
+    private ScheduleService scheduleService;
+
+    @Autowired
+    private ScheduleMapper scheduleMapper;
+
+    @Autowired
+    private PetService petService;
+
+    @Autowired
+    CustomerService customerService;
+
     @PostMapping
     public ScheduleDTO createSchedule(@RequestBody ScheduleDTO scheduleDTO) {
-        throw new UnsupportedOperationException();
+        Schedule schedule = scheduleMapper.DTOtoEntity(scheduleDTO);
+        Schedule newSchedule = scheduleService.createSchedule(schedule);
+        return scheduleMapper.entityToDTO(newSchedule);
     }
 
     @GetMapping
     public List<ScheduleDTO> getAllSchedules() {
-        throw new UnsupportedOperationException();
+        return scheduleMapper.entitiesToDTOs(scheduleService.getAllSchedules());
     }
 
     @GetMapping("/pet/{petId}")
     public List<ScheduleDTO> getScheduleForPet(@PathVariable long petId) {
-        throw new UnsupportedOperationException();
+        return scheduleMapper.entitiesToDTOs(scheduleService.getSchedulesByPetId(petId));
     }
 
     @GetMapping("/employee/{employeeId}")
     public List<ScheduleDTO> getScheduleForEmployee(@PathVariable long employeeId) {
-        throw new UnsupportedOperationException();
+        return scheduleMapper.entitiesToDTOs(scheduleService.getSchedulesByEmployeId(employeeId));
     }
 
     @GetMapping("/customer/{customerId}")
     public List<ScheduleDTO> getScheduleForCustomer(@PathVariable long customerId) {
-        throw new UnsupportedOperationException();
+        Customer customer = customerService.getCustomer(customerId);
+        List<Pet> petsByOwner = petService.getPetsByOwner(customer);
+        return scheduleMapper.entitiesToDTOs(scheduleService.getSchedulesByPetIds(petsByOwner));
     }
 }

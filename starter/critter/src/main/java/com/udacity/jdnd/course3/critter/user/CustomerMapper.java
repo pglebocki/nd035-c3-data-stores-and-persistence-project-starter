@@ -9,13 +9,12 @@ import java.util.stream.Collectors;
 @Component
 public class CustomerMapper {
 
-    public Customer DTOtoEntity(CustomerDTO dto, List<Pet> pets) {
+    public Customer DTOtoEntity(CustomerDTO dto) {
         Customer entity = new Customer();
         entity.setId(dto.getId());
         entity.setName(dto.getName());
         entity.setPhoneNumber(dto.getPhoneNumber());
         entity.setNotes(dto.getNotes());
-        entity.setPets(pets);
         return entity;
     }
 

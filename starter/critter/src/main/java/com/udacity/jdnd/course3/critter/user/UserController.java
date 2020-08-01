@@ -49,7 +49,9 @@ public class UserController {
                 pets.add(pet);
             }
         }
-        Customer customer = customerMapper.DTOtoEntity(customerDTO, pets);
+        Customer customer = customerMapper.DTOtoEntity(customerDTO);
+        customer.setPets(pets);
+
         Customer savedCustomer = customerService.createCustomer(customer);
         return customerMapper.entityToDTO(savedCustomer);
     }
