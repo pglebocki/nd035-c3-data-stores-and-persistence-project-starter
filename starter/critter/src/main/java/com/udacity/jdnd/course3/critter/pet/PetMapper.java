@@ -16,7 +16,7 @@ public class PetMapper {
         entity.setNotes(dto.getNotes());
         entity.setType(dto.getType());
         entity.setBirthDate(dto.getBirthDate());
-//        entity.setCustomer(customer);
+        entity.setCustomer(customer);
         return entity;
     }
 
@@ -27,7 +27,7 @@ public class PetMapper {
         dto.setNotes(entity.getNotes());
         dto.setType(entity.getType());
         dto.setBirthDate(entity.getBirthDate());
-//        dto.setOwnerId(entity.getCustomer().getId());
+        dto.setOwnerId(entity.getCustomer().getId());
         return dto;
     }
 

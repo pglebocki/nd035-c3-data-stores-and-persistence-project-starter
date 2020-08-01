@@ -62,7 +62,9 @@ public class UserController {
 
     @GetMapping("/customer/pet/{petId}")
     public CustomerDTO getOwnerByPet(@PathVariable long petId) {
-        throw new UnsupportedOperationException();
+        Pet pet = petService.getPet(petId);
+        Customer customer = customerService.getCustomer(pet.getCustomer().getId());
+        return customerMapper.entityToDTO(customer);
     }
 
     @PostMapping("/employee")
@@ -80,12 +82,14 @@ public class UserController {
 
     @PutMapping("/employee/{employeeId}")
     public void setAvailability(@RequestBody Set<DayOfWeek> daysAvailable, @PathVariable long employeeId) {
-        throw new UnsupportedOperationException();
+        Employee employee = employeeService.getEmployee(employeeId);
+        employee.setDaysAvailable(daysAvailable);
     }
 
     @GetMapping("/employee/availability")
     public List<EmployeeDTO> findEmployeesForService(@RequestBody EmployeeRequestDTO employeeDTO) {
-        throw new UnsupportedOperationException();
+        List<Employee> employees = employeeService.getEmployeeByService(employeeDTO.getSkills(), employeeDTO.getDate());
+        return employeeMapper.entitiesToDTOs(employees);
     }
 
 }

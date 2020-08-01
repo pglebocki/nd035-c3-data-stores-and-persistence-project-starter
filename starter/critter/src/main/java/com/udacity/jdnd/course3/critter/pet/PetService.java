@@ -27,7 +27,6 @@ public class PetService {
     }
 
     public List<Pet> getPetsByOwner(Customer customer) {
-//        return petRepository.findAllByOwner(customer);
-        return new ArrayList();
+        return petRepository.findAllByOwner(customer);
     }
 }

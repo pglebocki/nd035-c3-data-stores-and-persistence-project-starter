@@ -17,7 +17,9 @@ public class Pet {
 
     private String name;
 
-    private Long ownerId;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "customer_id")
+    private Customer customer;
 
     private LocalDate birthDate;
     private String notes;
@@ -62,11 +64,11 @@ public class Pet {
         this.notes = notes;
     }
 
-    public Long getOwnerId() {
-        return ownerId;
+    public Customer getCustomer() {
+        return customer;
     }
 
-    public void setOwnerId(Long ownerId) {
-        this.ownerId = ownerId;
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
     }
 }

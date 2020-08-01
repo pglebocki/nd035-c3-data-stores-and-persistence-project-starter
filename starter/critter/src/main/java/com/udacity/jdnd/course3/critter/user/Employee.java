@@ -16,7 +16,9 @@ public class Employee {
     @CollectionTable(name="employee_skills")
     private Set<EmployeeSkill> skills;
 
-//    private Set<DayOfWeek> daysAvailable;
+    @ElementCollection(targetClass=DayOfWeek.class)
+    @CollectionTable(name="days_available")
+    private Set<DayOfWeek> daysAvailable;
 
     public long getId() {
         return id;
@@ -42,11 +44,11 @@ public class Employee {
         this.skills = skills;
     }
 
-//    public Set<DayOfWeek> getDaysAvailable() {
-//        return daysAvailable;
-//    }
-//
-//    public void setDaysAvailable(Set<DayOfWeek> daysAvailable) {
-//        this.daysAvailable = daysAvailable;
-//    }
+    public Set<DayOfWeek> getDaysAvailable() {
+        return daysAvailable;
+    }
+
+    public void setDaysAvailable(Set<DayOfWeek> daysAvailable) {
+        this.daysAvailable = daysAvailable;
+    }
 }

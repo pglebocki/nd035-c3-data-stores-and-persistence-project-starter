@@ -2,6 +2,9 @@ package com.udacity.jdnd.course3.critter.user;
 
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Component
 public class EmployeeMapper {
 
@@ -10,6 +13,7 @@ public class EmployeeMapper {
         entity.setId(dto.getId());
         entity.setName(dto.getName());
         entity.setSkills(dto.getSkills());
+        entity.setDaysAvailable(dto.getDaysAvailable());
         return entity;
     }
 
@@ -18,6 +22,14 @@ public class EmployeeMapper {
         dto.setId(entity.getId());
         dto.setName(entity.getName());
         dto.setSkills(entity.getSkills());
+        dto.setDaysAvailable(entity.getDaysAvailable());
         return dto;
+    }
+
+    public List<EmployeeDTO> entitiesToDTOs(List<Employee> entities) {
+        return entities
+                .stream()
+                .map(this::entityToDTO)
+                .collect(Collectors.toList());
     }
 }
