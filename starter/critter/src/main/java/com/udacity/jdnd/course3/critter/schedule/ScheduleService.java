@@ -43,7 +43,7 @@ public class ScheduleService {
 
         return scheduleRepository.findAll()
                 .stream()
-                .filter(it -> it.getPetIds().contains(petIds) )
+                .filter(it -> it.getPetIds().containsAll(petIds) )
                 .collect(Collectors.toList());
     }
 }
