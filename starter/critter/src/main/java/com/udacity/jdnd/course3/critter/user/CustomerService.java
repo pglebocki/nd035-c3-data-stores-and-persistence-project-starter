@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CustomerService {
@@ -21,10 +22,14 @@ public class CustomerService {
     }
 
     public Customer getCustomer(Long id) {
-        Customer customer = customerRepository.getOne(id);
-        List<Pet> pets = petService.getPetsByOwner(customer);
-        customer.setPets(pets);
-        return customer;
+        Optional<Customer> optionalCustomer = customerRepository.findById(id);
+        if (optionalCustomer.isPresent()) {
+            Customer customer = optionalCustomer.get();
+            List<Pet> pets = petService.getPetsByOwner(customer);
+            customer.setPets(pets);
+            return customer;
+        }
+        return null;
     }
 
     public List<Customer> getAllCustomers() {

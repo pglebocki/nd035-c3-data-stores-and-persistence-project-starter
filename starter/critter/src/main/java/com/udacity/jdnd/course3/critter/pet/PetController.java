@@ -30,7 +30,8 @@ public class PetController {
         if (ownerId != null) {
             customer = customerService.getCustomer(ownerId);
         }
-        Pet pet = petMapper.DTOtoEntity(petDTO, customer);
+        Pet pet = petMapper.DTOtoEntity(petDTO);
+        pet.setCustomer(customer);
         Pet savedPet = petService.createPet(pet);
         return petMapper.entityToDTO(savedPet);
     }

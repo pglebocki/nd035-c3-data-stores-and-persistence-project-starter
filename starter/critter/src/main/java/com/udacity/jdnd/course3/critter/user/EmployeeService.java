@@ -19,8 +19,7 @@ public class EmployeeService {
     }
 
     public Employee getEmployee(Long id) {
-        // TODO handle exception when Not Found
-        return employeeRepository.findById(id).get();
+        return employeeRepository.findById(id).orElseGet(null);
     }
 
     public List<Employee> getEmployeeByService(Set<EmployeeSkill> skills, LocalDate date) {
