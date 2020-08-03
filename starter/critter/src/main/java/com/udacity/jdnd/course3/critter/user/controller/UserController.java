@@ -74,14 +74,19 @@ public class UserController {
     @GetMapping("/customer/pet/{petId}")
     public CustomerDTO getOwnerByPet(@PathVariable long petId) {
         Pet pet = petService.getPet(petId);
-        Customer customer = customerService.getCustomer(pet.getCustomer().getId());
-        return customerMapper.entityToDTO(customer);
+        if (pet != null) {
+            if (pet.getCustomer() != null) {
+                Customer customer = customerService.getCustomer(pet.getCustomer().getId());
+                return customerMapper.entityToDTO(customer);
+            }
+        }
+        return null;
     }
 
     @PostMapping("/employee")
     public EmployeeDTO saveEmployee(@RequestBody EmployeeDTO employeeDTO) {
         Employee employee = employeeMapper.DTOtoEntity(employeeDTO);
-        Employee savedEmployee = employeeService.createEmployee(employee);
+        Employee savedEmployee = employeeService.saveEmployee(employee);
         return employeeMapper.entityToDTO(savedEmployee);
     }
 
@@ -96,6 +101,7 @@ public class UserController {
         Employee employee = employeeService.getEmployee(employeeId);
         if (employee != null) {
             employee.setDaysAvailable(daysAvailable);
+            employeeService.saveEmployee(employee);
         }
     }
 

@@ -6,9 +6,13 @@ import com.udacity.jdnd.course3.critter.user.entity.Customer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
+@Transactional
 public class PetService {
 
     @Autowired
@@ -19,7 +23,18 @@ public class PetService {
     }
 
     public Pet getPet(Long id) {
-        return petRepository.findById(id).get();
+        return petRepository.findById(id).orElse(null);
+    }
+
+    public List<Pet> getPetsByIds(List<Long> ids) {
+        List<Pet> pets = new ArrayList<>();
+        if (ids != null) {
+            for (Long id : ids) {
+                Optional<Pet> petOptional = petRepository.findById(id);
+                petOptional.ifPresent(pets::add);
+            }
+        }
+        return pets;
     }
 
     public List<Pet> getAllPets() {

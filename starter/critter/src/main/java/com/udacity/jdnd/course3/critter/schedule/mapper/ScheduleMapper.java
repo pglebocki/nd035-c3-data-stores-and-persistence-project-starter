@@ -1,8 +1,9 @@
 package com.udacity.jdnd.course3.critter.schedule.mapper;
 
+import com.udacity.jdnd.course3.critter.pet.entity.Pet;
 import com.udacity.jdnd.course3.critter.schedule.dto.ScheduleDTO;
 import com.udacity.jdnd.course3.critter.schedule.entity.Schedule;
-import org.assertj.core.util.Lists;
+import com.udacity.jdnd.course3.critter.user.entity.Employee;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -15,8 +16,6 @@ public class ScheduleMapper {
         Schedule entity = new Schedule();
         entity.setActivities(dto.getActivities());
         entity.setDate(dto.getDate());
-        entity.setEmployeeIds(dto.getEmployeeIds());
-        entity.setPetIds(dto.getPetIds());
         return entity;
     }
 
@@ -24,8 +23,8 @@ public class ScheduleMapper {
         ScheduleDTO dto = new ScheduleDTO();
         dto.setActivities(entity.getActivities());
         dto.setDate(entity.getDate());
-        dto.setEmployeeIds(Lists.newArrayList(entity.getEmployeeIds()));
-        dto.setPetIds(Lists.newArrayList(entity.getPetIds()));
+        dto.setEmployeeIds(entity.getEmployees().stream().map(Employee::getId).collect(Collectors.toList()));
+        dto.setPetIds(entity.getPets().stream().map(Pet::getId).collect(Collectors.toList()));
         return dto;
     }
 

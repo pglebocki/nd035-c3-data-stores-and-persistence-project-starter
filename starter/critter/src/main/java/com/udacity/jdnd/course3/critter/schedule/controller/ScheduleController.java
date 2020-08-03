@@ -3,11 +3,13 @@ package com.udacity.jdnd.course3.critter.schedule.controller;
 import com.udacity.jdnd.course3.critter.pet.entity.Pet;
 import com.udacity.jdnd.course3.critter.pet.service.PetService;
 import com.udacity.jdnd.course3.critter.schedule.dto.ScheduleDTO;
+import com.udacity.jdnd.course3.critter.schedule.entity.Schedule;
 import com.udacity.jdnd.course3.critter.schedule.mapper.ScheduleMapper;
 import com.udacity.jdnd.course3.critter.schedule.service.ScheduleService;
-import com.udacity.jdnd.course3.critter.schedule.entity.Schedule;
 import com.udacity.jdnd.course3.critter.user.entity.Customer;
+import com.udacity.jdnd.course3.critter.user.entity.Employee;
 import com.udacity.jdnd.course3.critter.user.service.CustomerService;
+import com.udacity.jdnd.course3.critter.user.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,11 +32,21 @@ public class ScheduleController {
     private PetService petService;
 
     @Autowired
+    private EmployeeService employeeService;
+
+    @Autowired
     CustomerService customerService;
 
     @PostMapping
     public ScheduleDTO createSchedule(@RequestBody ScheduleDTO scheduleDTO) {
         Schedule schedule = scheduleMapper.DTOtoEntity(scheduleDTO);
+
+        List<Employee> employees = employeeService.getEmployeesByIds(scheduleDTO.getEmployeeIds());
+        schedule.setEmployees(employees);
+
+        List<Pet> pets = petService.getPetsByIds(scheduleDTO.getPetIds());
+        schedule.setPets(pets);
+
         Schedule newSchedule = scheduleService.createSchedule(schedule);
         return scheduleMapper.entityToDTO(newSchedule);
     }
@@ -51,7 +63,7 @@ public class ScheduleController {
 
     @GetMapping("/employee/{employeeId}")
     public List<ScheduleDTO> getScheduleForEmployee(@PathVariable long employeeId) {
-        return scheduleMapper.entitiesToDTOs(scheduleService.getSchedulesByEmployeId(employeeId));
+        return scheduleMapper.entitiesToDTOs(scheduleService.getSchedulesByEmployeeId(employeeId));
     }
 
     @GetMapping("/customer/{customerId}")

@@ -43,7 +43,10 @@ public class PetController {
     @GetMapping("/{petId}")
     public PetDTO getPet(@PathVariable long petId) {
         Pet pet = petService.getPet(petId);
-        return petMapper.entityToDTO(pet);
+        if (pet != null) {
+            return petMapper.entityToDTO(pet);
+        }
+        return null;
     }
 
     @GetMapping
